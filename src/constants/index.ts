@@ -13,3 +13,15 @@ export const CREATECANDIDATE = "api/recruitment/createcandidate/";
 export const GETCANDIDATES = "api/recruitment/getcandidates/";
 export const DELETECANDIDATES = "api/recruitment/deletecandidates/";
 export const EDITCANDIDATE = "api/recruitment/editcandidate/"
+
+// Clients
+export const GETCLIENTS = "api/clients/getclients/";
+
+// Proposals
+
+export const CREATEPROPOSAL = "api/recruitment/createproposal/";
+export const GETPROPOSALS = "api/recruitment/getproposals/";
+export const GETPROPOSALHISTORY = "api/recruitment/getproposalhistory/";
+export const MOVEPROPOSAL = "api/recruitment/moveproposal/";
+export const EDITPROPOSAL = "api/recruitment/editproposal/";
+

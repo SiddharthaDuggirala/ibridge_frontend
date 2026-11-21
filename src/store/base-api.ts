@@ -9,6 +9,8 @@ import {
   import { BASE_URL } from "@/constants";
   import type { ApiEnvelope, ApiError } from "@/types/api";
   import { clearToken, getToken } from "./token";
+
+  
   
   // 1. The plain request: base URL + token header.
   const rawBaseQuery = fetchBaseQuery({
@@ -84,7 +86,7 @@ import {
   // 3. The one API every feature file adds its endpoints to.
   export const baseApi = createApi({
     reducerPath: "api",
-    tagTypes: ["Candidate"],
+    tagTypes: ["Candidate", "Proposal", "Client"],
     baseQuery,
     endpoints: () => ({}),
   });

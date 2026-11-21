@@ -43,6 +43,16 @@ export interface Candidate {
   availability: string | null;
   cv_url: string | null;
   recruiter_notes: string | null;
+  can_edit:boolean;
+  can_delete:boolean;
+  can_propose: boolean;
+  proposals: CandidateProposal[];
+}
+
+export interface CandidateProposal {
+  id:number,
+  client: string,
+  stage: string,
 }
 
 export type EditCandidateRequest = CreateCandidateRequest & {candidate_id: number};

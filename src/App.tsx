@@ -8,8 +8,9 @@ import {LoginPage} from "@/pages/login-page";
 import {ProtectedRoute} from "@/components/layout/protected-route";
 import {CandidatesPage} from "@/pages/candidates-page";
 import {CandidateDetailPage} from "@/pages/candidate-detail-page";
+import {ProposalPage} from "@/pages/proposals-page";
 
-const BUILT_PATHS = ["/", "/candidates"];
+const BUILT_PATHS = ["/", "/candidates","/proposals"];
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/candidates/:id" element={<CandidateDetailPage />} />
                   <Route path="/candidates" element={<CandidatesPage />} />
+                  <Route path="/proposals" element={<ProposalPage />} />
                 {NAV_ITEMS.filter((item) => !BUILT_PATHS.includes(item.path)).map((item) => (
                   <Route
                     key={item.path}

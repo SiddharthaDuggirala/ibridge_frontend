@@ -1,7 +1,8 @@
 import { NavLink } from "react-router";
 
 import { cn } from "@/lib/utils";
-import { NAV_GROUPS } from "./navigation";
+import { getRole } from "@/store/token";
+import { navGroupsFor } from "./navigation";
 
 export function SidebarNav({
     collapsed,
@@ -10,9 +11,10 @@ export function SidebarNav({
     collapsed: boolean;
     onNavigate?: () => void;
   }){
+    const groups = navGroupsFor(getRole());
     return (
       <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-4" aria-label="Main">
-        {NAV_GROUPS.map((group) => (
+        {groups.map((group) => (
           <div key={group.label}>
             {!collapsed ? (
               <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">

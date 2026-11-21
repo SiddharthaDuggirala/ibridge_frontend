@@ -12,6 +12,8 @@ import { CANDIDATE_SOURCES, CANDIDATE_STATUSES } from "@/constants/candidates";
 import { useGetCandidateQuery } from "@/store/candidates-api";
 import { labelFor, money } from "@/utils/candidate-format";
 import { toSkillList } from "@/utils/skills";
+import { ProposalProgress } from "@/components/candidates/proposal-progress";
+import { ProposalJourney } from "@/components/proposals/proposal-journey";
 
 
 export function CandidateDetailPage() {
@@ -51,7 +53,6 @@ export function CandidateDetailPage() {
     const name = candidate.name ?? "Unnamed";
     const skills = toSkillList(candidate.skills);
 
-
     return (
         <>
           <PageHeader
@@ -60,16 +61,34 @@ export function CandidateDetailPage() {
             actions={
               <>
                 {backButton}
-                <CandidateFormDialog candidate={candidate} />
+                {candidate.can_edit ? <CandidateFormDialog candidate={candidate} /> : null}
+                {candidate.can_delete ? (
                 <DeleteCandidateButton
                   id={candidate.id}
                   name={name}
                   onDeleted={() => navigate("/candidates")}
                 />
+                ) : null}
               </>
             }
           />
-    
+          <Card>
+            <CardHeader>
+              <CardTitle>Approval progress</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {candidate.proposals.length === 0 ? (
+                <>
+                  <ProposalProgress stage={null} label="" />
+                  <p className="text-sm text-muted-foreground">
+                    Not proposed to a client yet. The Lead picks the client and the hourly bill rate.
+                  </p>
+                </>
+              ) : (
+                candidate.proposals.map((proposal) => <ProposalJourney key={proposal.id} proposal={proposal} />))
+              }
+            </CardContent>
+          </Card>
           <div className="grid gap-4 lg:grid-cols-3">
             <Card>
               <CardHeader>

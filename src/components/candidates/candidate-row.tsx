@@ -7,6 +7,8 @@ import type { Candidate } from "@/types/candidate";
 import { toSkillList } from "@/utils/skills";
 import { CandidateFormDialog } from "@/components/candidates/candidate-form-dialog";
 import { DeleteCandidateButton } from "@/components/candidates/delete-candidate-button";
+import { ProposalProgress } from "@/components/candidates/proposal-progress";
+import { ProposeDialog } from "@/components/candidates/propose-dialog";
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -30,6 +32,17 @@ export function CandidateRow({ candidate }: { candidate: Candidate }) {
         <p className="text-xs text-muted-foreground">
           {candidate.location ?? "—"} · {experience}
         </p>
+      </TableCell>
+      <TableCell>
+        <div className="space-y-1.5">
+          {candidate.proposals.length === 0 ? (
+            <ProposalProgress stage={null} label="" size="compact" />
+          ) : (
+            candidate.proposals.map((proposal) => (
+              <ProposalProgress key={proposal.id} stage={proposal.stage} label={proposal.client} size="compact" />
+            ))
+          )}
+        </div>
       </TableCell>
       <TableCell>
         <div className="flex flex-wrap gap-1">
@@ -57,14 +70,19 @@ export function CandidateRow({ candidate }: { candidate: Candidate }) {
       </TableCell>
       
       <TableCell>{candidate.owner ?? "—"}</TableCell>
-      <TableCell className="text-right whitespace-nowrap">
-        <Button variant="ghost" size="icon" asChild>
-          <Link to={`/candidates/${candidate.id}`} aria-label={`View ${candidate.name ?? "candidate"}`}>
-            <Eye className="size-4" />
-          </Link>
-        </Button>
-        <CandidateFormDialog candidate={candidate} />
-        <DeleteCandidateButton id={candidate.id} name={candidate.name ?? "this candidate"} />
+      <TableCell>
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/candidates/${candidate.id}`} aria-label={`View ${candidate.name ?? "candidate"}`}>
+              <Eye className="size-4" />
+            </Link>
+          </Button>
+          {candidate.can_propose ? <ProposeDialog candidate={candidate} /> : null}
+          {candidate.can_edit ? <CandidateFormDialog candidate={candidate} /> : null}
+          {candidate.can_delete ? (
+            <DeleteCandidateButton id={candidate.id} name={candidate.name ?? "this candidate"} />
+          ) : null}
+        </div>
       </TableCell>
     </TableRow>
   );

@@ -76,17 +76,18 @@ export function CandidatesPage() {
       </div>
 
       <Card>
-        <Table className="min-w-[900px]">
+        <Table className="min-w-[1100px]">
           <TableHeader>
             <TableRow>
               <TableHead className="px-4">Candidate</TableHead>
+              <TableHead>Progress</TableHead>
               <TableHead>Skills</TableHead>
               <TableHead>Source</TableHead>
               <TableHead>Notice</TableHead>
               <TableHead>Current / expected</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Owner</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead >Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -116,7 +117,7 @@ function MessageRow({ text, isError = false }: { text: string; isError?: boolean
   return (
     <TableRow>
       <TableCell
-        colSpan={8}
+        colSpan={9}
         className={isError ? "py-12 text-center text-destructive" : "py-12 text-center text-muted-foreground"}
       >
         {text}

@@ -2,6 +2,7 @@ import { BarChart3,Briefcase,
     Building2,
 CalendarCheck,
 CalendarOff,
+ClipboardCheck,
 ClipboardList,
 Clock,
 FileSignature,
@@ -22,12 +23,15 @@ Target,
 UserPlus,
 Users,
 Wallet,
-type LucideIcon,} from "lucide-react";
+type LucideIcon,
+} from "lucide-react";
+import { ROLES } from "@/constants/roles";
 
 export interface NavItem{
     label:string;
     path:string;
     icon:LucideIcon;
+    roles?: string[];
 }
 
 export interface NavGroup{
@@ -52,7 +56,8 @@ export const NAV_GROUPS:NavGroup[] = [{
     },
     {
         label:"Recruting",
-        items:[ { label: "Candidates", path: "/candidates", icon: Users },
+        items:[ { label: "Candidates", path: "/candidates", icon: Users, roles: [ROLES.RECRUITER, ROLES.LEAD, ROLES.BU_HEAD,ROLES.MD,ROLES.HR] },
+            { label: "Proposals", path: "/proposals", icon: ClipboardCheck,roles:[ROLES.RECRUITER,ROLES.LEAD,ROLES.BU_HEAD,ROLES.MD,ROLES.HR] },
             { label: "Pipeline", path: "/applications", icon: GitBranch },
             { label: "Submissions", path: "/submissions", icon: Send },
             { label: "Communications", path: "/communications", icon: MessagesSquare },
@@ -98,6 +103,7 @@ export const NAV_GROUPS:NavGroup[] = [{
             { label: "Settings", path: "/settings", icon: Settings }
         ],
     },
+    
 ];
 
 export const NAV_ITEMS:NavItem[] = NAV_GROUPS.flatMap(group => group.items);
@@ -108,3 +114,11 @@ export function findNavItem(pathname: string): NavItem | undefined {
   }
 
 
+  export function navGroupsFor(role: string | null): NavGroup[] {
+    return NAV_GROUPS.map((group) => ({
+      ...group,
+      items: group.items.filter(
+        (item) => role === ROLES.SYSADMIN || (role !== null && item.roles?.includes(role)),
+      ),
+    })).filter((group) => group.items.length > 0);
+  }

@@ -12,3 +12,9 @@ export function money(amount: string | null): string {
     if (!value) return "—";
     return options.find((option) => option.value === value)?.label ?? value;
   }
+
+export function hourlyRate(amount: number | undefined, currency: string | undefined): string {
+    if (amount == null || !currency) return "—";
+    const formatted = new Intl.NumberFormat("en-IN", { style: "currency", currency }).format(amount);
+    return `${formatted}/hr`;
+  }
