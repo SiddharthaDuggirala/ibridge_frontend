@@ -19,10 +19,12 @@ import {
 } from "@/components/ui/table";
 import { useGetCandidatesQuery } from "@/store/candidates-api";
 import { toSkillList } from "@/utils/skills";
+import { RefreshButton } from "@/components/refresh-button";
+
 
 export function CandidatesPage() {
   const [search, setSearch] = useState("");
-  const { data, error, isLoading } = useGetCandidatesQuery();
+  const { data, error, isLoading, refetch, isFetching } = useGetCandidatesQuery();
   
   const candidates = data ?? [];
 
@@ -64,15 +66,18 @@ export function CandidatesPage() {
         <StatTile label="Talent pools" value="—" />
       </div>
 
-      <div className="relative max-w-sm">
-        <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          className="pl-8"
-          placeholder="Search by name, skill or city…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          aria-label="Search candidates"
-        />
+      <div className="flex items-center justify-between gap-3">
+        <div className="relative w-full max-w-sm">
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            className="pl-8"
+            placeholder="Search by name, skill or city…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            aria-label="Search candidates"
+          />
+        </div>
+        <RefreshButton onRefresh={refetch} isFetching={isFetching} />
       </div>
 
       <Card>

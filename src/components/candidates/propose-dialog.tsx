@@ -1,5 +1,5 @@
 import { Send } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -55,7 +55,7 @@ export function ProposeDialog({ candidate }: { candidate: Candidate }) {
       setOpen(nextOpen);
     }
   
-    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
       event.preventDefault();
       try {
         await createProposal({

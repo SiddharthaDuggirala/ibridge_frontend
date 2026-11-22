@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import { useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ export function LoginPage() {
   const [login, { isLoading, error }] = useLoginMutation();
   const navigate = useNavigate();
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault(); // stop the browser from reloading the page
     try {
       const result = await login({ username, password }).unwrap();

@@ -3,6 +3,7 @@ import {Link} from "react-router";
 import { ProposalProgress } from "@/components/candidates/proposal-progress";
 import {PageHeader} from "@/components/page-header";
 import {Card} from "@/components/ui/card";
+import { RefreshButton } from "@/components/refresh-button";
 
 import {
     Table,
@@ -19,7 +20,7 @@ import { EditRateDialog } from "@/components/proposals/edit-rate-dialog";
 
 
 export function ProposalPage() {
-    const { data, error, isLoading} = useGetProposalsQuery();
+    const { data, error, isLoading, refetch, isFetching} = useGetProposalsQuery();
     const proposals = data ?? [];
 
     const showMoney = proposals.some((proposal) => "bill_rate_hourly" in proposal);
@@ -28,6 +29,10 @@ export function ProposalPage() {
     return (
         <>
         <PageHeader title="Proposals" description="Every candidate proposed to a client, and where each one is in the approvals."/>
+
+        <div className="flex items-center justify-end gap-3">
+            <RefreshButton onRefresh={refetch} isFetching={isFetching} />
+        </div>
 
         <Card>
             <Table className="min-w-[900px]">

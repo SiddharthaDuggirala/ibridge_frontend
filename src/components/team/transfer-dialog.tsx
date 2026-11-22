@@ -28,7 +28,8 @@ export function TransferDialog({member,team}: {member:TeamMember, team: TeamMemb
    const [result, setResult] = useState<TransferOwnershipResult | null>(null);
    const [transferOwnership, { isLoading, error }] = useTransferOwnershipMutation();
 
-   const colleagues = team.filter((other) => other.id !== member.id && other.role.shortcode === member.role.shortcode);
+   const colleagues = team.filter((other) => other.id !== member.id && other.is_active
+   && other.role.shortcode === member.role.shortcode );
 
    function handleOpenChange(nextOpen:boolean) {
         if(nextOpen){

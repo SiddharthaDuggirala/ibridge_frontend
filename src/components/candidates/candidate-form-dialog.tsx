@@ -1,5 +1,5 @@
 import { Pencil, Plus } from "lucide-react";
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useState, type SubmitEvent, type ReactNode } from "react";
 
 import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
@@ -95,7 +95,7 @@ export function CandidateFormDialog({candidate}:{candidate?:Candidate}) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     // Turn the text fields into the shape Django expects.

@@ -26,23 +26,23 @@ export function DashboardPage() {
       <div className="grid gap-3 sm:grid-cols-5 xl:grid-cols-5">
         <StatTile label="PEOPLE"
           value={data.people}
-          hint="All employee records"
+          hint="User accounts with a role"
           />
         
         <StatTile 
           label="CANDIDATES"
           value={data.candidates}
-          hint="Candidates in play across all stages"
+          hint="In the candidate database"
           />
 
         <StatTile label="EMPLOYEES"
           value={data.employees}
-          hint="Next 2 weeks"
+          hint="Employee Records"
           />
 
         <StatTile label="PENDING APPROVALS"
           value={data.pending_approvals}
-          hint="1 awaiting approval"
+          hint="Timesheets, invoices and payroll runs"
           tone={data.pending_approvals > 0 ? "warning" : "default"}
           />
 
