@@ -25,3 +25,7 @@ export const GETPROPOSALHISTORY = "api/recruitment/getproposalhistory/";
 export const MOVEPROPOSAL = "api/recruitment/moveproposal/";
 export const EDITPROPOSAL = "api/recruitment/editproposal/";
 
+// Team (system admin)
+export const GETTEAM = "api/accounts/getteam/";
+export const TRANSFEROWNERSHIP = "api/accounts/transferownership/";
+

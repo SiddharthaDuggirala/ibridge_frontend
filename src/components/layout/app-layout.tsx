@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { findNavItem } from "./navigation";
 import { SidebarNav } from "./sidebar-nav";
 import {UserMenu} from "./user-menu"
+import { ErrorBoundary } from "@/components/error-boundary";
 
 function Brand() {
     return (
@@ -110,7 +111,9 @@ export function AppLayout() {
           {/* The current page renders here */}
           <main className="flex-1 px-4 py-6 sm:px-6">
             <div className="mx-auto w-full max-w-7xl space-y-6">
-              <Outlet />
+              <ErrorBoundary resetKey={pathname}>
+                <Outlet />
+              </ErrorBoundary>
             </div>
           </main>
         </div>

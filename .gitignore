@@ -26,3 +26,6 @@ dist-ssr
 PROJECT_ANALYSIS.md*
 *.md
 *.claude*
+
+# Browser screenshots from Claude Code checks
+.playwright-mcp/

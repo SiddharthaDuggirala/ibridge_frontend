@@ -10,12 +10,17 @@ const STEPS = [
     { key: "bu_review", label: "BU Head" },
     { key: "md_approval", label: "MD" },
     { key: "hr_offer", label: "HR offer" },
+    {key:"offer_released", label: "Offer released"}
   ];
+
+const FINAL_STAGE = "offer_released" 
+
 
 const DONE_BY: Record<string,string>={
   lead: "proposed",
   bu_review: "bu_submit",
   md_approval: "md_approve",
+  offer_released: "hr_release_offer",
 }
 
 // A step waiting this many days or more turns amber.
@@ -27,6 +32,7 @@ type StepState = "done" | "current" | "upcoming";
 
 function currentStepIndex(stage: string | null): number {
     if (!stage) return 1;
+    if (stage === FINAL_STAGE) return STEPS.length;
     const index = STEPS.findIndex((step) => step.key === stage);
     return index === -1 ? 1 : index;
   }
@@ -93,8 +99,15 @@ export function ProposalProgress({
   history?: ProposalHistoryEntry[];
 }) {
   const current = currentStepIndex(stage);
-  const summary = stage ? `${label} · with ${STEPS[current].label}` : "Waiting for Lead";
-  const ariaLabel = `Approval progress: step ${current + 1} of ${STEPS.length}, ${STEPS[current].label}`;
+  const complete = current >= STEPS.length;
+  const summary = !stage
+    ? "Waiting for Lead"
+    : complete
+      ? `${label} · Offer released`
+      : `${label} · with ${STEPS[current].label}`;
+  const ariaLabel = complete
+    ? "Approval progress: complete, offer released"
+    : `Approval progress: step ${current + 1} of ${STEPS.length}, ${STEPS[current].label}`;
 
   if (size === "compact") {
     return (

@@ -23,6 +23,7 @@ const ACTIONS: Record<
   bu_submit: { label: "Send to MD", title: "Send to the MD for approval", commentRequired: false, variant: "default" },
   md_approve: { label: "Approve", title: "Approve this proposal", commentRequired: false, variant: "default" },
   md_send_back: { label: "Send back", title: "Send back to the BU Head", commentRequired: true, variant: "outline" },
+  hr_release_offer: { label: "Release offer", title: "Release the offer letter", commentRequired: false, variant: "default" },
 };
 
 // One button + confirm dialog for one approval step (e.g. "Send to MD").

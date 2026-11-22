@@ -12,6 +12,7 @@ const ACTION_LABELS: Record<string, string> = {
     bu_submit: "Sent to the MD",
     md_approve: "Approved by the MD",
     md_send_back: "Sent back to the BU Head",
+    hr_release_offer: "Offer released by HR",
   };
 
 function readableTime(at: string): string {

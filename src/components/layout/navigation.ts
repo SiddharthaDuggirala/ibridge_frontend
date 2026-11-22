@@ -24,6 +24,7 @@ UserPlus,
 Users,
 Wallet,
 type LucideIcon,
+UserCog,
 } from "lucide-react";
 import { ROLES } from "@/constants/roles";
 
@@ -100,7 +101,8 @@ export const NAV_GROUPS:NavGroup[] = [{
     {
         label: "Administration",
         items: [
-            { label: "Settings", path: "/settings", icon: Settings }
+          { label: "Team", path: "/team", icon: UserCog },
+            { label: "Settings", path: "/settings", icon: Settings },
         ],
     },
     
