@@ -1,9 +1,13 @@
+import type { PersonRef } from "@/types/team";
+
 export interface Proposal {
     id: number;
     candidate: { id: number; name: string | null; primary_skill: string; location: string | null };
     client: { id: number; name: string | null };
     stage: string;
     proposed_by: string;
+    // The BU Head above the Lead who proposed it (null if proposed by someone outside the hierarchy).
+    bu_head: PersonRef | null;
     created_on: string;
     can_edit: boolean;
     allowed_actions: string[];

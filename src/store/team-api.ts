@@ -1,5 +1,7 @@
-import { GETTEAM, TRANSFEROWNERSHIP } from "@/constants";
-import type { TeamMember, TransferOwnershipRequest, TransferOwnershipResult } from "@/types/team";
+import { GETTEAM, TRANSFEROWNERSHIP, ADDUSER, SETREPORTING } from "@/constants";
+import type { TeamMember, TransferOwnershipRequest, TransferOwnershipResult, AddUserRequest,
+  SetReportingRequest,
+ } from "@/types/team";
 import { baseApi } from "./base-api";
 
 export const teamApi = baseApi.injectEndpoints({
@@ -13,7 +15,18 @@ export const teamApi = baseApi.injectEndpoints({
       query: (body) => ({ url: TRANSFEROWNERSHIP, method: "POST", body }),
       invalidatesTags: ["Team", "Candidate", "Proposal"],
     }),
+    addUser: build.mutation<TeamMember,AddUserRequest>({
+      query: (body) => ({url:ADDUSER, method:"POST", body}),
+      invalidatesTags:["Team"],
+    }),
+    // A new manager changes who can see which candidates and proposals, so those lists refresh too.
+    setReporting: build.mutation<TeamMember, SetReportingRequest>({
+      query: (body) => ({ url: SETREPORTING, method: "POST", body }),
+      invalidatesTags: ["Team", "Candidate", "Proposal"],
+    }),
   }),
 });
 
-export const { useGetTeamQuery, useTransferOwnershipMutation } = teamApi;
+export const { useGetTeamQuery, useTransferOwnershipMutation,useAddUserMutation,
+  useSetReportingMutation,
+ } = teamApi;

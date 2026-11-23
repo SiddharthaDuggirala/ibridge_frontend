@@ -17,6 +17,9 @@ import { useGetProposalsQuery } from "@/store/proposals-api";
 import { hourlyRate } from "@/utils/candidate-format";
 import { ProposalActionDialog } from "@/components/proposals/proposal-action-dialog";
 import { EditRateDialog } from "@/components/proposals/edit-rate-dialog";
+import { useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { PersonRef } from "@/types/team";
 
 
 export function ProposalPage() {
@@ -25,12 +28,41 @@ export function ProposalPage() {
 
     const showMoney = proposals.some((proposal) => "bill_rate_hourly" in proposal);
     const columnCount  = showMoney ? 7:5;
+    const [buHeadFilter, setBuHeadFilter] = useState("all");
+    // Every BU Head that appears in the list, once each (a Map keeps one entry per id), sorted by name.
+    const buHeadsById = new Map<number, PersonRef>();
+    for (const proposal of proposals) {
+      if (proposal.bu_head) buHeadsById.set(proposal.bu_head.id, proposal.bu_head);
+    }
+    const buHeads = [...buHeadsById.values()].sort((a, b) => a.name.localeCompare(b.name));
+    const shown =
+    buHeadFilter === "all"
+      ? proposals
+      : proposals.filter((proposal) => String(proposal.bu_head?.id) === buHeadFilter);
 
     return (
         <>
         <PageHeader title="Proposals" description="Every candidate proposed to a client, and where each one is in the approvals."/>
 
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center justify-between gap-3">
+            {/* Only worth showing when the list spans more than one BU Head (the MD and sa01). */}
+            {buHeads.length > 1 ? (
+              <Select value={buHeadFilter} onValueChange={setBuHeadFilter}>
+                <SelectTrigger className="w-56" aria-label="Filter by BU Head">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All BU Heads</SelectItem>
+                  {buHeads.map((buHead) => (
+                    <SelectItem key={buHead.id} value={String(buHead.id)}>
+                      {buHead.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <div />
+            )}
             <RefreshButton onRefresh={refetch} isFetching={isFetching} />
         </div>
 
@@ -52,10 +84,13 @@ export function ProposalPage() {
                          <MessageRow text="Loading proposals…" colSpan={columnCount} />
                     ) : error ? (
                         <MessageRow text={error.message ?? "Could not load proposals."} colSpan={columnCount} isError />
-                    ): proposals.length === 0 ? (
-                        <MessageRow text="No proposals yet." colSpan={columnCount} />
+                    ): shown.length === 0 ? (
+                        <MessageRow
+                          text={proposals.length === 0 ? "No proposals yet." : "No proposals for this BU Head."}
+                          colSpan={columnCount}
+                        />
                     ) : (
-                        proposals.map((proposal) => (
+                        shown.map((proposal) => (
                             <TableRow key={proposal.id}>
                             <TableCell className="px-4">
                               <Link to={`/candidates/${proposal.candidate.id}`} className="font-medium hover:underline">

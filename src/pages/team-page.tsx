@@ -12,6 +12,9 @@ import {
 import { useGetTeamQuery } from "@/store/team-api";
 import type { TeamMember } from "@/types/team";
 import { TransferDialog } from "@/components/team/transfer-dialog";
+import { AddUserDialog } from "@/components/team/add-user-dialog";
+import { ChangeReportingDialog } from "@/components/team/change-reporting-dialog";
+import { needsReporting } from "@/utils/reporting";
 
 
 // "2 candidates · 1 proposal", or "Nothing" when they own nothing.
@@ -21,7 +24,13 @@ function ownsText(owns: TeamMember["owns"]): string {
     if (owns.proposals > 0) parts.push(`${owns.proposals} proposal${owns.proposals === 1 ? "" : "s"}`);
     return parts.length > 0 ? parts.join(" · ") : "Nothing";
   }
-  
+// "Lead 1", or for HR "Works for: BU1, BU2", or "—" for people who report to nobody.
+function reportingText(member: TeamMember): string {
+  if (member.reports_to) return member.reports_to.name;
+  if (member.hr_for.length > 0) return `Works for: ${member.hr_for.map((bu) => bu.name).join(", ")}`;
+  return "—";
+}
+
   // System admin only: everyone with a login, their role, and what they own.
   export function TeamPage() {
     const { data, error, isLoading } = useGetTeamQuery();
@@ -32,6 +41,7 @@ function ownsText(owns: TeamMember["owns"]): string {
         <PageHeader
           title="Team"
           description="Everyone with a login. When someone leaves, hand their work to a colleague before deactivating them."
+          actions={<AddUserDialog team={team} />}
         />
   
         <Card>
@@ -41,6 +51,7 @@ function ownsText(owns: TeamMember["owns"]): string {
                 <TableHead className="px-4">Person</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Reports to</TableHead>
                 <TableHead>Owns</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -67,11 +78,17 @@ function ownsText(owns: TeamMember["owns"]): string {
                         <Badge variant="outline">Deactivated</Badge>
                       )}
                     </TableCell>
+                    <TableCell>{reportingText(member)}</TableCell>
                     <TableCell>{ownsText(member.owns)}</TableCell>
                     <TableCell>
-                      {member.role.shortcode !== "sa01" ? (
-                        <TransferDialog member={member} team={team} />
-                      ) : null}
+                      <div className="flex items-center gap-2">
+                        {member.is_active && needsReporting(member.role.shortcode) ? (
+                          <ChangeReportingDialog member={member} team={team} />
+                        ) : null}
+                        {member.role.shortcode !== "sa01" ? (
+                          <TransferDialog member={member} team={team} />
+                        ) : null}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -88,7 +105,7 @@ function MessageRow({ text, isError = false }: { text: string; isError?: boolean
     return (
       <TableRow>
         <TableCell
-          colSpan={5}
+          colSpan={6  }
           className={isError ? "py-12 text-center text-destructive" : "py-12 text-center text-muted-foreground"}
         >
           {text}

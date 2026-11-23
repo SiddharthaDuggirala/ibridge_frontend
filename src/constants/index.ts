@@ -29,3 +29,6 @@ export const EDITPROPOSAL = "api/recruitment/editproposal/";
 export const GETTEAM = "api/accounts/getteam/";
 export const TRANSFEROWNERSHIP = "api/accounts/transferownership/";
 
+
+export const ADDUSER = "api/accounts/adduser/";
+export const SETREPORTING = "api/accounts/setreporting/";

@@ -74,7 +74,8 @@ export function TransferDialog({member,team}: {member:TeamMember, team: TeamMemb
             {result ? (
               <div className="space-y-4">
                 <p className="text-sm">
-                  Moved <span className="font-medium">{result.candidates_moved}</span> candidate(s) and{" "}
+                <span className="font-medium">{result.proposals_moved}</span> proposal(s) and{" "}
+                <span className="font-medium">{result.reports_moved}</span> direct report(s).
                   <span className="font-medium">{result.proposals_moved}</span> proposal(s).
                   {result.deactivated ? ` ${member.name} is deactivated and logged out.` : ""}
                 </p>
