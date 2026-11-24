@@ -8,15 +8,18 @@ import { getRole } from "@/store/token";
 export function HomePage() {
   const role = getRole();
 
-  if (role === ROLES.SYSADMIN) {
+  if (role === ROLES.SYSADMIN) {  
     return <DashboardPage />;
   }
   // A recruiter's work is the candidate list, so "/" takes them straight there.
   if (role === ROLES.RECRUITER || role === ROLES.LEAD) {
     return <Navigate to="/candidates" replace />;
   }
-  // BU Head, MD and HR work from the approval queue.
-  if (role === ROLES.BU_HEAD || role === ROLES.MD || role === ROLES.HR) {
+  // The MD starts from the pipeline overview: every BU Head at a glance
+  if (role === ROLES.MD) {
+    return <Navigate to="/pipeline" replace />;
+  }
+  if (role === ROLES.BU_HEAD || role === ROLES.HR) {
     return <Navigate to="/proposals" replace />;
   }
 

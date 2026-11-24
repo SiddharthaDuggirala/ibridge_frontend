@@ -32,3 +32,8 @@ export const TRANSFEROWNERSHIP = "api/accounts/transferownership/";
 
 export const ADDUSER = "api/accounts/adduser/";
 export const SETREPORTING = "api/accounts/setreporting/";
+
+// Onboarding
+export const GETONBOARDINGS = "api/recruitment/getonboardings/";
+export const MOVEONBOARDING = "api/recruitment/moveonboarding/";
+export const GETPIPELINE = "api/recruitment/getpipeline/";

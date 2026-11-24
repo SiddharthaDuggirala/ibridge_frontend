@@ -2,6 +2,9 @@ import { format } from "date-fns";
 import { CornerUpLeft } from "lucide-react";
 
 import { ProposalProgress } from "@/components/candidates/proposal-progress";
+import { InductionDialog } from "@/components/onboarding/induction-dialog";
+import { OnboardingProgress } from "@/components/onboarding/onboarding-progress";
+import { useGetOnboardingsQuery } from "@/store/onboarding-api";
 import { useGetProposalHistoryQuery } from "@/store/proposals-api";
 import type { CandidateProposal } from "@/types/candidate";
 import { parseDjangoDateTime } from "@/utils/dates";
@@ -13,6 +16,13 @@ const ACTION_LABELS: Record<string, string> = {
     md_approve: "Approved by the MD",
     md_send_back: "Sent back to the BU Head",
     hr_release_offer: "Offer released by HR",
+    lead_offer_accepted: "Offer accepted by the candidate",
+    lead_offer_declined: "Offer declined by the candidate",
+    lead_bgv_initiate: "Background verification started",
+    lead_bgv_success: "Background verification passed",
+    lead_bgv_failed: "Background verification failed",
+    lead_mark_joined: "Joined",
+    hr_induction_done: "Induction done by HR",
   };
 
 function readableTime(at: string): string {
@@ -28,12 +38,27 @@ export function ProposalJourney({ proposal }: { proposal: CandidateProposal }) {
     // At bu_review after a send-back, the latest send-back explains why it came back.
     const sentBack =
       proposal.stage === "bu_review" ? history.findLast((entry) => entry.action === "md_send_back") : undefined;
-  
+
+    // Once the candidate has joined, their onboarding case. skip: no request at all before they join.
+    // (The Onboarding page asks for the same list, so RTK Query shares one request between them.)
+    const { data: onboardings } = useGetOnboardingsQuery(undefined, { skip: proposal.stage !== "joined" });
+    const onboarding = onboardings?.find((item) => item.proposal_id === proposal.id);
+
     return (
       <div className="space-y-3">
         <p className="text-sm font-medium">{proposal.client}</p>
-  
+
         <ProposalProgress stage={proposal.stage} label={proposal.client} history={history} />
+
+        {onboarding ? (
+          <div className="space-y-3 rounded-md border border-border p-3">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Onboarding</p>
+              {onboarding.allowed_actions.includes("hr_induction_done") ? <InductionDialog onboarding={onboarding} /> : null}
+            </div>
+            <OnboardingProgress onboarding={onboarding} />
+          </div>
+        ) : null}
   
         {sentBack ? (
           <div className="flex gap-2 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200">
@@ -65,4 +90,4 @@ export function ProposalJourney({ proposal }: { proposal: CandidateProposal }) {
         ) : null}
       </div>
     );
-  }
+  }

@@ -86,7 +86,7 @@ import {
   // 3. The one API every feature file adds its endpoints to.
   export const baseApi = createApi({
     reducerPath: "api",
-    tagTypes: ["Candidate", "Proposal", "Client", "Team"],
+    tagTypes: ["Candidate", "Proposal", "Client", "Team", "Onboarding"],
     baseQuery,
     endpoints: () => ({}),
   });
@@ -112,4 +112,4 @@ export interface TransferOwnershipResult {
   candidates_moved: number;
   proposals_moved: number;
   deactivated: boolean;
-}
+}

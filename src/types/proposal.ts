@@ -15,8 +15,28 @@ export interface Proposal {
     bill_rate_currency?: string;
     gross_margin_amount?: number | null;
     gross_margin_percent?: number | null;
+    // Background verification, once the Lead has started it (null before that).
+    bgv: ProposalBgv | null;
+    // The onboarding case, once the Lead has marked the candidate joined (null before that).
+    onboarding: ProposalOnboarding | null;
   }
-  
+
+// A short view of the onboarding case started from a proposal. Dates arrive as "dd/mm/YYYY".
+export interface ProposalOnboarding {
+  id: number;
+  stage: string;
+  joining_date: string | null;
+  induction_date: string | null;
+}
+
+// The latest background verification of a proposal. Dates arrive as "dd/mm/YYYY".
+export interface ProposalBgv {
+  vendor: string | null;
+  status: "initiated" | "success" | "failed" | null;
+  initiated_on: string | null;
+  completed_on: string | null;
+}
+
   export interface CreateProposalRequest {
     candidate_id: number;
     client_id: number;
@@ -39,11 +59,16 @@ export interface MoveProposalRequest {
   proposal_id: number;
   action:string;
   comment: string;
-} 
+  // Only for "Start BGV".
+  bgv_vendor?: string;
+  bgv_initiated_on?: string;
+  // Only for "Mark joined".
+  joining_date?: string;
+}
 
 
 export interface EditProposalRequest {
   proposal_id: number;
   bill_rate_hourly: number;
   bill_rate_currency: string;
-}
+}

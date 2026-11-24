@@ -27,7 +27,7 @@ export const proposalsApi = baseApi.injectEndpoints({
     // Moving a proposal changes its stage, which both the Proposals page and the candidate rows show.
     moveProposal: build.mutation<Proposal, MoveProposalRequest>({
       query:(body) => ({url: MOVEPROPOSAL, method: "POST", body}),
-      invalidatesTags: ["Proposal", "Candidate"],
+      invalidatesTags: ["Proposal", "Candidate", "Onboarding"],
     }),
     getProposalHistory: build.query<ProposalHistoryEntry[], { proposal_id: number }>({
       query: ({ proposal_id }) => ({ url: GETPROPOSALHISTORY, method: "POST", body: { proposal_id } }),
@@ -38,4 +38,4 @@ export const proposalsApi = baseApi.injectEndpoints({
 
 export const { useGetProposalsQuery, useCreateProposalMutation, 
   useGetProposalHistoryQuery,
-  useMoveProposalMutation,useEditProposalMutation } = proposalsApi;
+  useMoveProposalMutation,useEditProposalMutation } = proposalsApi;
