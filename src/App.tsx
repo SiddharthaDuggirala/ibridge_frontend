@@ -12,9 +12,10 @@ import {ProposalPage} from "@/pages/proposals-page";
 import {TeamPage} from "@/pages/team-page";
 import {OnboardingPage} from "@/pages/onboarding-page";
 import {PipelinePage} from "@/pages/pipeline-page";
+import {ClientsPage} from "@/pages/clients-page";
 
 
-const BUILT_PATHS = ["/", "/candidates", "/proposals", "/team", "/onboarding", "/pipeline"];
+const BUILT_PATHS = ["/", "/candidates", "/proposals", "/team", "/onboarding", "/pipeline", "/clients"];
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
                   <Route path="/team" element={<TeamPage />} />
                   <Route path="/onboarding" element={<OnboardingPage />} />
                   <Route path="/pipeline" element={<PipelinePage />} />
+                  <Route path="/clients" element={<ClientsPage />} />
                 {NAV_ITEMS.filter((item) => !BUILT_PATHS.includes(item.path)).map((item) => (
                   <Route
                     key={item.path}

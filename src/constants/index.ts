@@ -2,6 +2,7 @@ export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Accounts
 export const LOGIN = "api/accounts/login/";
+export const CHANGEPASSWORD = "api/accounts/changepassword/";
 
 // Workforce
 export const GETDASHBOARD = "api/workforce/getdashboard/";
@@ -13,8 +14,11 @@ export const CREATECANDIDATE = "api/recruitment/createcandidate/";
 export const GETCANDIDATES = "api/recruitment/getcandidates/";
 export const DELETECANDIDATES = "api/recruitment/deletecandidates/";
 export const EDITCANDIDATE = "api/recruitment/editcandidate/"
+export const MOVEEXIT = "api/recruitment/moveexit/";
 
 // Clients
+export const CREATECLIENT = "api/clients/createclient/"
+export const EDITCLIENT = "api/clients/editclient/"
 export const GETCLIENTS = "api/clients/getclients/";
 
 // Proposals

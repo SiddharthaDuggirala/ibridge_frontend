@@ -1,5 +1,5 @@
-import { GETCLIENTS } from "@/constants";
-import type { Client } from "@/types/client";
+import {CREATECLIENT, GETCLIENTS,EDITCLIENT } from "@/constants";
+import { type EditClientRequest, type Client, type CreateClientRequest } from "@/types/client";
 import { baseApi } from "./base-api";
 
 export const clientsApi = baseApi.injectEndpoints({
@@ -9,7 +9,15 @@ export const clientsApi = baseApi.injectEndpoints({
       query: () => ({ url: GETCLIENTS, method: "POST", body: { client_id: null } }),
       providesTags: ["Client"],
     }),
+    createClient: build.mutation<Client[],CreateClientRequest>({
+      query: (body) => ({url:CREATECLIENT, method:"POST", body}),
+      invalidatesTags: ["Client"],
+    }),
+    editClient: build.mutation<Client[], EditClientRequest>({
+      query:(body) => ({url:EDITCLIENT, method:"POST", body}),
+      invalidatesTags: ["Client"],
+    }),
   }),
 });
 
-export const { useGetClientsQuery } = clientsApi;
+export const { useGetClientsQuery, useCreateClientMutation, useEditClientMutation } = clientsApi;

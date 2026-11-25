@@ -1,4 +1,4 @@
-import { LogOut } from "lucide-react";
+import { LogOut,KeyRound } from "lucide-react";
 import { useDispatch } from "react-redux";
 import {useNavigate} from "react-router";
 
@@ -10,14 +10,16 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { ChangePasswordDialog } from "@/components/layout/change-password-dialog";
 import {baseApi} from "@/store/base-api";
 import {clearToken} from "@/store/token";
+import { useState } from "react";
 
 export function UserMenu() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate(); 
+    const [passwordOpen, setPasswordOpen] = useState(false);
 
     function handleLogout() {
         clearToken();
@@ -26,6 +28,7 @@ export function UserMenu() {
     } 
 
     return(
+        <>
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" aria-label="Account menu">
@@ -38,13 +41,19 @@ export function UserMenu() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+                <DropdownMenuItem onSelect={() => setPasswordOpen(true)}>
+                    <KeyRound className="size-4"/>
+                    Change password
+                </DropdownMenuItem>
                 <DropdownMenuItem onSelect={handleLogout}>
                     <LogOut className="size-4"/>
                         Sign Out
-                    
+
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
+        <ChangePasswordDialog open={passwordOpen} onOpenChange={setPasswordOpen} />
+        </>
     )
 
 

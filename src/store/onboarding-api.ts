@@ -1,5 +1,5 @@
-import { GETONBOARDINGS, MOVEONBOARDING } from "@/constants";
-import type { MoveOnboardingRequest, Onboarding } from "@/types/onboarding";
+import { GETONBOARDINGS, MOVEONBOARDING, MOVEEXIT } from "@/constants";
+import type { MoveExitRequest, MoveOnboardingRequest, Onboarding } from "@/types/onboarding";
 import { baseApi } from "./base-api";
 
 export const onboardingApi = baseApi.injectEndpoints({
@@ -14,7 +14,11 @@ export const onboardingApi = baseApi.injectEndpoints({
       query: (body) => ({ url: MOVEONBOARDING, method: "POST", body }),
       invalidatesTags: ["Onboarding", "Proposal"],
     }),
+    moveExit: build.mutation<Onboarding, MoveExitRequest>({
+      query: (body) => ({ url: MOVEEXIT, method: "POST", body }),
+      invalidatesTags: ["Onboarding", "Proposal"],
+    }),
   }),
 });
 
-export const { useGetOnboardingsQuery, useMoveOnboardingMutation } = onboardingApi;
+export const { useGetOnboardingsQuery, useMoveOnboardingMutation,useMoveExitMutation } = onboardingApi;

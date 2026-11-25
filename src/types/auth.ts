@@ -14,3 +14,12 @@ export interface LoginResponse {
     token: string;
     role: string | null;
   }
+
+export interface ChangePasswordRequest {
+  old_password: string;
+  new_password: string;
+}
+
+export interface ChangePasswordResult {
+  other_sessions_signed_out: number;
+}

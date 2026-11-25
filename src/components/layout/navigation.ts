@@ -52,7 +52,7 @@ export const NAV_GROUPS:NavGroup[] = [{
     {
         label:"Sales & Clients",
         items:[
-            {label:"Clients", path:"/clients", icon:Building2},
+            {label:"Clients", path:"/clients", icon:Building2, roles:[ROLES.SYSADMIN]},
             {label:"Requirements", path:"/requirements",icon:ClipboardList},
         ],
     },

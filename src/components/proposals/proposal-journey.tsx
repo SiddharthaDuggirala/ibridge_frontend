@@ -8,6 +8,8 @@ import { useGetOnboardingsQuery } from "@/store/onboarding-api";
 import { useGetProposalHistoryQuery } from "@/store/proposals-api";
 import type { CandidateProposal } from "@/types/candidate";
 import { parseDjangoDateTime } from "@/utils/dates";
+import {ROLES} from "@/constants/roles";
+import { getRole } from "@/store/token";
 
 const ACTION_LABELS: Record<string, string> = {
     proposed: "Proposed to the client",
@@ -33,7 +35,12 @@ function readableTime(at: string): string {
 // One proposal on the candidate page: client name, the stepper with who/when, a sent-back note, and the full history.
 export function ProposalJourney({ proposal }: { proposal: CandidateProposal }) {
     // Each proposal loads its own history, which is why this is its own component (hooks cannot go inside .map).
-    const { data: history = [] } = useGetProposalHistoryQuery({ proposal_id: proposal.id });
+    // Recruiters and HR see the stage but not the history (Django refuses it too), so we don't even ask.
+    const role = getRole();
+    const canSeeHistory = role !== ROLES.RECRUITER && role !== ROLES.HR;
+    // Each proposal loads its own history, which is why this is its own component (hooks cannot go inside .map).
+    // skip: no request at all; history stays [] and every history-based part below simply doesn't show.
+    const { data: history = [] } = useGetProposalHistoryQuery({ proposal_id: proposal.id }, { skip: !canSeeHistory });
   
     // At bu_review after a send-back, the latest send-back explains why it came back.
     const sentBack =
@@ -90,4 +97,4 @@ export function ProposalJourney({ proposal }: { proposal: CandidateProposal }) {
         ) : null}
       </div>
     );
-  }
+  }

@@ -1,5 +1,5 @@
-import { LOGIN } from "@/constants";
-import type { LoginRequest, LoginResponse } from "@/types/auth";
+import { LOGIN, CHANGEPASSWORD } from "@/constants";
+import type { LoginRequest, LoginResponse, ChangePasswordRequest, ChangePasswordResult } from "@/types/auth";
 import { baseApi } from "./base-api";
 
 export const authApi = baseApi.injectEndpoints({
@@ -11,7 +11,16 @@ export const authApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    changePassword: build.mutation<ChangePasswordResult,ChangePasswordRequest>({
+      query:(body) => ({
+        url: CHANGEPASSWORD,
+        method:"POST",
+        body,
+
+      }),
+
+    })
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useChangePasswordMutation } = authApi;

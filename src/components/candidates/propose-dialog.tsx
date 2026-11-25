@@ -100,7 +100,7 @@ export function ProposeDialog({ candidate }: { candidate: Candidate }) {
                     <SelectValue placeholder={clientsLoading ? "Loading clients…" : "Choose a client"} />
                   </SelectTrigger>
                   <SelectContent>
-                    {(clients ?? []).map((client) => {
+                    {(clients ?? []).filter((client) => client.is_active).map((client) => {
                       const taken = alreadyProposed.includes(client.name ?? "");
                       return (
                         <SelectItem key={client.id} value={String(client.id)} disabled={taken}>
