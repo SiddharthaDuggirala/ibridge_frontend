@@ -14,6 +14,7 @@ import { labelFor, money } from "@/utils/candidate-format";
 import { toSkillList } from "@/utils/skills";
 import { ProposalProgress } from "@/components/candidates/proposal-progress";
 import { ProposalJourney } from "@/components/proposals/proposal-journey";
+import { LifeCycleCard } from "@/components/candidates/life-cycle-card";
 
 
 export function CandidateDetailPage() {
@@ -89,6 +90,7 @@ export function CandidateDetailPage() {
               }
             </CardContent>
           </Card>
+          <LifeCycleCard candidateId={candidate.id} />
           <div className="grid gap-4 lg:grid-cols-3">
             <Card>
               <CardHeader>

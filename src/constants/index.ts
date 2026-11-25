@@ -15,6 +15,7 @@ export const GETCANDIDATES = "api/recruitment/getcandidates/";
 export const DELETECANDIDATES = "api/recruitment/deletecandidates/";
 export const EDITCANDIDATE = "api/recruitment/editcandidate/"
 export const MOVEEXIT = "api/recruitment/moveexit/";
+export const GETLIFECYCLE = "api/recruitment/getlifecycle/";
 
 // Clients
 export const CREATECLIENT = "api/clients/createclient/"

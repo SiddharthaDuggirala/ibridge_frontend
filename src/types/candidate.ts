@@ -1,3 +1,5 @@
+import type { CurrentStatus } from "@/types/lifecycle";
+
 export interface CreateCandidateRequest {
   name: string;
   email: string;
@@ -47,12 +49,15 @@ export interface Candidate {
   can_delete:boolean;
   can_propose: boolean;
   proposals: CandidateProposal[];
+  current: CurrentStatus;
 }
 
 export interface CandidateProposal {
   id:number,
   client: string,
   stage: string,
+  is_open: boolean,
+
 }
 
 export type EditCandidateRequest = CreateCandidateRequest & {candidate_id: number};

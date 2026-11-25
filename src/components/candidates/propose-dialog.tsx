@@ -38,7 +38,7 @@ export function ProposeDialog({ candidate }: { candidate: Candidate }) {
     const [createProposal, { isLoading, error }] = useCreateProposalMutation();
   
     // Clients this candidate is already proposed to (Django refuses duplicates too).
-    const alreadyProposed = candidate.proposals.map((proposal) => proposal.client);
+    const alreadyProposed = candidate.proposals.filter((proposal) => proposal.is_open).map((proposal) => proposal.client);
   
     function handleClientChange(value: string) {
       setClientId(value);
@@ -76,7 +76,8 @@ export function ProposeDialog({ candidate }: { candidate: Candidate }) {
         <Dialog open={open} onOpenChange={handleOpenChange}>
           <DialogTrigger asChild>
             <Button variant="outline" size="sm" title="Add client bill rate and send to BU Head">
-              <Send className="size-4" /> Bill rate
+              
+              <Send className="size-4" /> Propose
             </Button>
           </DialogTrigger>
     

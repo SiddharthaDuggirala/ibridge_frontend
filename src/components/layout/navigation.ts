@@ -25,7 +25,9 @@ Users,
 Wallet,
 type LucideIcon,
 UserCog,
+UserMinus,
 Workflow,
+Coffee,
 } from "lucide-react";
 import { ROLES } from "@/constants/roles";
 
@@ -72,6 +74,8 @@ export const NAV_GROUPS:NavGroup[] = [{
         label: "People",
         items: [
           { label: "Onboarding", path: "/onboarding", icon: UserPlus, roles: [ROLES.RECRUITER, ROLES.LEAD, ROLES.BU_HEAD, ROLES.MD, ROLES.HR] },
+          { label: "Exits", path: "/exits", icon: UserMinus, roles: [ROLES.LEAD, ROLES.BU_HEAD, ROLES.MD, ROLES.HR] },
+          { label: "Bench", path: "/bench", icon: Coffee, roles: [ROLES.LEAD, ROLES.BU_HEAD, ROLES.MD, ROLES.HR] },
           { label: "Pipeline Overview", path: "/pipeline", icon: Workflow, roles: [ROLES.MD, ROLES.BU_HEAD] },
           { label: "Verification", path: "/verification", icon: ShieldCheck },
           { label: "Employees", path: "/employees", icon: IdCard },

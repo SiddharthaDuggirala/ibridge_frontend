@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoginMutation } from "@/store/auth-api";
-import { setToken,setRole } from "@/store/token";
+import { setToken,setRole,setUserName } from "@/store/token";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
@@ -20,6 +20,7 @@ export function LoginPage() {
       const result = await login({ username, password }).unwrap();
       setToken(result.token);
       setRole(result.role);
+      setUserName(result.user.name || result.user.username);
       navigate("/", { replace: true });
     } catch {
       // Nothing to do here: the error message is shown below from `error`.

@@ -10,6 +10,8 @@ import type { CandidateProposal } from "@/types/candidate";
 import { parseDjangoDateTime } from "@/utils/dates";
 import {ROLES} from "@/constants/roles";
 import { getRole } from "@/store/token";
+import { ExitPanel } from "@/components/onboarding/exit-panel";
+import { RecordExitDialog } from "@/components/onboarding/record-exit-dialog";
 
 const ACTION_LABELS: Record<string, string> = {
     proposed: "Proposed to the client",
@@ -25,6 +27,10 @@ const ACTION_LABELS: Record<string, string> = {
     lead_bgv_failed: "Background verification failed",
     lead_mark_joined: "Joined",
     hr_induction_done: "Induction done by HR",
+    exit_record_exit: "Exit recorded",
+    exit_change_last_day: "Last working day changed",
+    exit_clear_item: "Clearance item done",
+    exit_release_relieving_letter: "Relieving letter released by HR",
   };
 
 function readableTime(at: string): string {
@@ -56,16 +62,19 @@ export function ProposalJourney({ proposal }: { proposal: CandidateProposal }) {
         <p className="text-sm font-medium">{proposal.client}</p>
 
         <ProposalProgress stage={proposal.stage} label={proposal.client} history={history} />
+        
 
         {onboarding ? (
           <div className="space-y-3 rounded-md border border-border p-3">
             <div className="flex items-center justify-between gap-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Onboarding</p>
               {onboarding.allowed_actions.includes("hr_induction_done") ? <InductionDialog onboarding={onboarding} /> : null}
+              {onboarding.exit_actions.includes("record_exit") ? <RecordExitDialog onboarding={onboarding} /> : null}
             </div>
             <OnboardingProgress onboarding={onboarding} />
           </div>
         ) : null}
+        {onboarding?.exit ? <ExitPanel onboarding={onboarding} exit={onboarding.exit} /> : null}
   
         {sentBack ? (
           <div className="flex gap-2 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200">

@@ -20,23 +20,35 @@ import {
 import { useGetCandidatesQuery } from "@/store/candidates-api";
 import { toSkillList } from "@/utils/skills";
 import { RefreshButton } from "@/components/refresh-button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+
+
+// Which people the list shows. Those who left are hidden until asked for; nobody is ever deleted.
+type ShowFilter = "current" | "left" | "everyone";
 
 export function CandidatesPage() {
   const [search, setSearch] = useState("");
+  const [show, setShow] = useState<ShowFilter>("current");
   const { data, error, isLoading, refetch, isFetching } = useGetCandidatesQuery();
-  
+
   const candidates = data ?? [];
 
   // Tiles: counted from the full list.
   const available = candidates.filter(
-    (c) => c.status === "active" && (c.notice_days ?? 0) <= 30,
+    (c) => c.current.key === "available" && c.status === "active" && (c.notice_days ?? 0) <= 30,
   ).length;
-  const placed = candidates.filter((c) => c.status === "placed").length;
+  // Someone serving their last days is still working there.
+  const working = candidates.filter((c) => ["working", "leaving"].includes(c.current.key)).length;
+  const onBench = candidates.filter((c) => c.current.key === "bench").length;
+  const leftCount = candidates.filter((c) => c.current.key === "left").length;
 
   // Search: name, any skill, or city (ignores upper/lower case).
   const term = search.trim().toLowerCase();
   const shown = candidates.filter((c) => {
+    const left = c.current.key === "left";
+    if (show === "current" && left) return false;
+    if (show === "left" && !left) return false;
     if (!term) return true;
     const text = [c.name, c.location, c.primary_skill, ...toSkillList(c.skills ?? [])]
       .join(" ")
@@ -62,8 +74,8 @@ export function CandidatesPage() {
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <StatTile label="Candidates" value={isLoading ? "—" : candidates.length} />
         <StatTile label="Available now" value={isLoading ? "—" : available} hint="Active, notice ≤ 30 days" tone="positive" />
-        <StatTile label="Placed" value={isLoading ? "—" : placed} />
-        <StatTile label="Talent pools" value="—" />
+        <StatTile label="Working" value={isLoading ? "—" : working} hint="Placed with a client" />
+        <StatTile label="On bench" value={isLoading ? "—" : onBench} hint="Free for the next client" tone="warning" />
       </div>
 
       <div className="flex items-center justify-between gap-3">
@@ -77,6 +89,16 @@ export function CandidatesPage() {
             aria-label="Search candidates"
           />
         </div>
+        <Select value={show} onValueChange={(value) => setShow(value as ShowFilter)}>
+          <SelectTrigger className="mr-auto w-48" aria-label="Which people to show">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="current">Current people</SelectItem>
+            <SelectItem value="left">Left ({leftCount})</SelectItem>
+            <SelectItem value="everyone">Everyone</SelectItem>
+          </SelectContent>
+        </Select>
         <RefreshButton onRefresh={refetch} isFetching={isFetching} />
       </div>
 
@@ -97,11 +119,11 @@ export function CandidatesPage() {
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <MessageRow text="Loading candidates…" />
+               <MessageRow text="Loading candidates…" />
             ) : error ? (
               <MessageRow text={error.message ?? "Could not load candidates."} isError />
             ) : shown.length === 0 ? (
-              <MessageRow text={term ? "No candidates match your search." : "No candidates yet."} />
+              <MessageRow text={candidates.length === 0 ? "No candidates yet." : term ? "No candidates match your search." : "No one to show here."} />
             ) : (
               shown.map((candidate) => <CandidateRow key={candidate.id} candidate={candidate} />)
             )}

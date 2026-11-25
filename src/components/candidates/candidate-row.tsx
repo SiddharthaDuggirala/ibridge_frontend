@@ -11,6 +11,7 @@ import { ProposalProgress } from "@/components/candidates/proposal-progress";
 import { ProposeDialog } from "@/components/candidates/propose-dialog";
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CurrentStatusBadge } from "@/components/candidates/current-status-badge";
 
 
 const STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -32,6 +33,9 @@ export function CandidateRow({ candidate }: { candidate: Candidate }) {
         <p className="text-xs text-muted-foreground">
           {candidate.location ?? "—"} · {experience}
         </p>
+        <div className="mt-1">
+          <CurrentStatusBadge status={candidate.current} />
+        </div>
       </TableCell>
       <TableCell>
         <div className="space-y-1.5">

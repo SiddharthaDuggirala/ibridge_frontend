@@ -2,6 +2,7 @@ import { Link } from "react-router";
 
 import { InductionDialog } from "@/components/onboarding/induction-dialog";
 import { OnboardingProgress } from "@/components/onboarding/onboarding-progress";
+import { RecordExitDialog } from "@/components/onboarding/record-exit-dialog";
 import { PageHeader } from "@/components/page-header";
 import { RefreshButton } from "@/components/refresh-button";
 import { Card } from "@/components/ui/card";
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/table";
 import { useBuHeadFilter } from "@/hooks/use-bu-head-filter";
 import { useGetOnboardingsQuery } from "@/store/onboarding-api";
+import { ExitProgress } from "@/components/onboarding/exit-progress";
 
 const COLUMN_COUNT = 7;
 
@@ -89,11 +91,18 @@ export function OnboardingPage() {
                   <TableCell>{onboarding.bu_head?.name ?? "—"}</TableCell>
                   <TableCell>{onboarding.joining_date ?? "—"}</TableCell>
                   <TableCell>
-                    <OnboardingProgress onboarding={onboarding} size="compact" />
+                  {onboarding.exit ? (
+                      <ExitProgress exit={onboarding.exit} size="compact" />
+                    ) : (
+                      <OnboardingProgress onboarding={onboarding} size="compact" />
+                    )}
                   </TableCell>
                   <TableCell>
                     {onboarding.allowed_actions.includes("hr_induction_done") ? (
                       <InductionDialog onboarding={onboarding} />
+                    ) : null}
+                    {onboarding.exit_actions.includes("record_exit") ? (
+                      <RecordExitDialog onboarding={onboarding} />
                     ) : null}
                   </TableCell>
                 </TableRow>

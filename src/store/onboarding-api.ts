@@ -16,7 +16,7 @@ export const onboardingApi = baseApi.injectEndpoints({
     }),
     moveExit: build.mutation<Onboarding, MoveExitRequest>({
       query: (body) => ({ url: MOVEEXIT, method: "POST", body }),
-      invalidatesTags: ["Onboarding", "Proposal"],
+      invalidatesTags: ["Onboarding", "Proposal","Candidate"],
     }),
   }),
 });
