@@ -2,12 +2,12 @@ import {Database} from "lucide-react";
 import {Link} from "react-router";
 
 
-import { NAV_ITEMS } from "@/components/layout/navigation";
+import { BUILT_PATHS, NAV_ITEMS } from "@/components/layout/navigation";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 
 
-const AREAS = NAV_ITEMS.filter((item) => item.path !== "/");
+const AREAS = NAV_ITEMS.filter((item) => item.path !== "/" && BUILT_PATHS.includes(item.path));
 
 export function AllEntities() {
     return (

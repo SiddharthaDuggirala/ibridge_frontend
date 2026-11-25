@@ -17,6 +17,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ROLES } from "@/constants/roles";
+import { TablePagination } from "@/components/table-pagination";
+import { usePagination } from "@/hooks/use-pagination";
 import { useGetClientsQuery } from "@/store/clients-api";
 import { getRole } from "@/store/token";
 import { parseDjangoDateTime } from "@/utils/dates";
@@ -42,6 +44,7 @@ function sinceText(since: string | null): string {
     const shown = clients
       .filter((client) => !term || [client.name, client.industry, client.country].join(" ").toLowerCase().includes(term))
       .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? ""));
+    const pages = usePagination(shown, term);
 
       return (
         <>
@@ -85,7 +88,7 @@ function sinceText(since: string | null): string {
                 ) : shown.length === 0 ? (
                   <MessageRow text={clients.length === 0 ? "No clients yet." : "No clients match your search."} />
                 ) : (
-                  shown.map((client) => (
+                  pages.pageRows.map((client) => (
                     <TableRow key={client.id}>
                       <TableCell className="px-4">
                         <p className="font-medium">{client.name ?? `Client ${client.id}`}</p>
@@ -104,6 +107,7 @@ function sinceText(since: string | null): string {
               </TableBody>
             </Table>
           </Card>
+          <TablePagination {...pages} />
         </>
       );
     }

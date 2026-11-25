@@ -16,6 +16,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useBuHeadFilter } from "@/hooks/use-bu-head-filter";
+import { TablePagination } from "@/components/table-pagination";
+import { usePagination } from "@/hooks/use-pagination";
 import { useGetOnboardingsQuery } from "@/store/onboarding-api";
 
 const COLUMN_COUNT = 7;
@@ -30,6 +32,7 @@ export function ExitsPage() {
   const [needsYouOnly, setNeedsYouOnly] = useState(false);
   const needsYou = shown.filter((onboarding) => onboarding.exit_actions.length > 0);
   const visible = needsYouOnly ? needsYou : shown;
+  const pages = usePagination(visible, `${buHeadFilter}|${needsYouOnly}`);
 
   let emptyText = "No exits for this BU Head.";
   if (exits.length === 0) {
@@ -94,7 +97,7 @@ export function ExitsPage() {
             ) : visible.length === 0 ? (
               <MessageRow text={emptyText} />
             ) : (
-              visible.map((onboarding) => (
+              pages.pageRows.map((onboarding) => (
                 <TableRow key={onboarding.id}>
                   <TableCell className="px-4">
                     <Link to={`/candidates/${onboarding.candidate.id}`} className="font-medium hover:underline">
@@ -115,6 +118,7 @@ export function ExitsPage() {
           </TableBody>
         </Table>
       </Card>
+      <TablePagination {...pages} />
     </>
   );
 }

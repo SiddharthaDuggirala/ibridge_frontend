@@ -16,6 +16,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useBuHeadFilter } from "@/hooks/use-bu-head-filter";
+import { TablePagination } from "@/components/table-pagination";
+import { usePagination } from "@/hooks/use-pagination";
 import { useGetOnboardingsQuery } from "@/store/onboarding-api";
 import { ExitProgress } from "@/components/onboarding/exit-progress";
 
@@ -26,6 +28,7 @@ export function OnboardingPage() {
   const { data, error, isLoading, isFetching, refetch } = useGetOnboardingsQuery();
   const onboardings = data ?? [];
   const { buHeads, buHeadFilter, setBuHeadFilter, shown } = useBuHeadFilter(onboardings);
+  const pages = usePagination(shown, buHeadFilter);
 
   return (
     <>
@@ -76,7 +79,7 @@ export function OnboardingPage() {
             ) : shown.length === 0 ? (
               <MessageRow text={onboardings.length === 0 ? "No one has joined yet." : "No joiners for this BU Head."} />
             ) : (
-              shown.map((onboarding) => (
+              pages.pageRows.map((onboarding) => (
                 <TableRow key={onboarding.id}>
                   <TableCell className="px-4">
                     <Link to={`/candidates/${onboarding.candidate.id}`} className="font-medium hover:underline">
@@ -111,6 +114,7 @@ export function OnboardingPage() {
           </TableBody>
         </Table>
       </Card>
+      <TablePagination {...pages} />
     </>
   );
 }

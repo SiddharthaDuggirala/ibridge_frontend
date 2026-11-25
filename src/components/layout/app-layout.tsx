@@ -1,8 +1,7 @@
-import { Bell, Menu, PanelLeftClose, PanelLeftOpen, Search } from "lucide-react";
+import { Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { findNavItem } from "./navigation";
@@ -76,19 +75,7 @@ export function AppLayout() {
               </SheetContent>
             </Sheet>
   
-            <div className="relative ml-1 hidden max-w-sm flex-1 md:block">
-              <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                className="h-9 pl-8"
-                placeholder="Search clients, requirements, candidates…"
-                aria-label="Search"
-              />
-            </div>
-  
             <div className="ml-auto flex items-center gap-1.5">
-              <Button variant="ghost" size="icon" aria-label="Notifications">
-                <Bell className="size-5" />
-              </Button>
               <UserMenu />
             </div>
           </header>

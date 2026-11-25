@@ -13,6 +13,8 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table";
+import { TablePagination } from "@/components/table-pagination";
+import { usePagination } from "@/hooks/use-pagination";
 import { useGetProposalsQuery } from "@/store/proposals-api";
 import { hourlyRate } from "@/utils/candidate-format";
 import { ProposalActionDialog } from "@/components/proposals/proposal-action-dialog";
@@ -35,6 +37,7 @@ export function ProposalPage() {
     const [waitingOnly, setWaitingOnly] = useState(false);
     const waiting = shown.filter((proposal) => proposal.allowed_actions.length > 0);
     const visible = waitingOnly ? waiting : shown;
+    const pages = usePagination(visible, `${buHeadFilter}|${waitingOnly}`);
     // Recruiters never move a proposal, so the toggle would always say 0 for them.
     const canAct = getRole() !== ROLES.RECRUITER;
 
@@ -100,7 +103,7 @@ export function ProposalPage() {
                     ): visible.length === 0 ? (
                       <MessageRow text={emptyText} colSpan={columnCount} />
                     ) : (
-                        visible.map((proposal) => (
+                        pages.pageRows.map((proposal) => (
                             <TableRow key={proposal.id}>
                             <TableCell className="px-4">
                               <Link to={`/candidates/${proposal.candidate.id}`} className="font-medium hover:underline">
@@ -145,6 +148,7 @@ export function ProposalPage() {
                 </TableBody>
             </Table>
         </Card>
+        <TablePagination {...pages} />
             
         </>
     )

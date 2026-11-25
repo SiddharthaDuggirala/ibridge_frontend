@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route} from "react-router";
 import {AppLayout} from "@/components/layout/app-layout";
-import {NAV_ITEMS} from "@/components/layout/navigation";
+import {BUILT_PATHS, NAV_ITEMS} from "@/components/layout/navigation";
 import {NotFoundPage} from "@/pages/not-found-page";
 import {PlaceholderPage} from "@/pages/placeholder-page";
 import {HomePage} from "@/pages/home-page";
@@ -16,10 +16,6 @@ import {ClientsPage} from "@/pages/clients-page";
 import {ExitsPage} from "@/pages/exits-page";
 import {BenchPage} from "@/pages/bench-page";
 
-
-const BUILT_PATHS = ["/", "/candidates", "/proposals", "/team", "/onboarding", "/pipeline", "/clients", "/exits",
-  "/bench",
-];
 
 function App() {
   return (

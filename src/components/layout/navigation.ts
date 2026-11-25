@@ -59,7 +59,7 @@ export const NAV_GROUPS:NavGroup[] = [{
         ],
     },
     {
-        label:"Recruting",
+        label:"Recruiting",
         items:[ { label: "Candidates", path: "/candidates", icon: Users, roles: [ROLES.RECRUITER, ROLES.LEAD, ROLES.BU_HEAD,ROLES.MD,ROLES.HR] },
             { label: "Proposals", path: "/proposals", icon: ClipboardCheck,roles:[ROLES.RECRUITER,ROLES.LEAD,ROLES.BU_HEAD,ROLES.MD,ROLES.HR] },
             { label: "Pipeline", path: "/applications", icon: GitBranch },
@@ -116,6 +116,9 @@ export const NAV_GROUPS:NavGroup[] = [{
 
 export const NAV_ITEMS:NavItem[] = NAV_GROUPS.flatMap(group => group.items);
 
+// The pages that really exist. Everything else stays out of the menu until it is built.
+export const BUILT_PATHS = ["/", "/candidates", "/proposals", "/team", "/onboarding", "/pipeline", "/clients", "/exits", "/bench"];
+
 export function findNavItem(pathname: string): NavItem | undefined {
     const firstPart = "/" + (pathname.split("/").filter(Boolean)[0] ?? "");
     return NAV_ITEMS.find((item) => item.path === firstPart);
@@ -126,7 +129,9 @@ export function findNavItem(pathname: string): NavItem | undefined {
     return NAV_GROUPS.map((group) => ({
       ...group,
       items: group.items.filter(
-        (item) => role === ROLES.SYSADMIN || (role !== null && item.roles?.includes(role)),
+        (item) =>
+          BUILT_PATHS.includes(item.path) &&
+          (role === ROLES.SYSADMIN || (role !== null && item.roles?.includes(role))),
       ),
     })).filter((group) => group.items.length > 0);
   }

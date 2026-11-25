@@ -14,6 +14,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { TablePagination } from "@/components/table-pagination";
+import { usePagination } from "@/hooks/use-pagination";
 import { useGetCandidatesQuery } from "@/store/candidates-api";
 import { toSkillList } from "@/utils/skills";
 
@@ -29,6 +31,7 @@ export function BenchPage() {
   const bench = (data ?? [])
     .filter((candidate) => candidate.current.key === "bench")
     .sort((a, b) => (b.current.days ?? 0) - (a.current.days ?? 0));
+  const pages = usePagination(bench);
 
   return (
     <>
@@ -64,7 +67,7 @@ export function BenchPage() {
             ) : bench.length === 0 ? (
               <MessageRow text="Nobody is on the bench." />
             ) : (
-              bench.map((candidate) => {
+              pages.pageRows.map((candidate) => {
                 const days = candidate.current.days ?? 0;
                 const proposedTo = candidate.proposals.filter((proposal) => proposal.is_open);
                 return (
@@ -113,6 +116,7 @@ export function BenchPage() {
           </TableBody>
         </Table>
       </Card>
+      <TablePagination {...pages} />
     </>
   );
 }

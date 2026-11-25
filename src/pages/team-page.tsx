@@ -9,6 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TablePagination } from "@/components/table-pagination";
+import { usePagination } from "@/hooks/use-pagination";
 import { useGetTeamQuery } from "@/store/team-api";
 import type { TeamMember } from "@/types/team";
 import { TransferDialog } from "@/components/team/transfer-dialog";
@@ -35,6 +37,7 @@ function reportingText(member: TeamMember): string {
   export function TeamPage() {
     const { data, error, isLoading } = useGetTeamQuery();
     const team = data ?? [];
+    const pages = usePagination(team);
   
     return (
       <>
@@ -64,7 +67,7 @@ function reportingText(member: TeamMember): string {
               ) : team.length === 0 ? (
                 <MessageRow text="No users yet." />
               ) : (
-                team.map((member) => (
+                pages.pageRows.map((member) => (
                   <TableRow key={member.id} className={member.is_active ? undefined : "opacity-60"}>
                     <TableCell className="px-4">
                       <p className="font-medium">{member.name}</p>
@@ -96,6 +99,7 @@ function reportingText(member: TeamMember): string {
             </TableBody>
           </Table>
         </Card>
+        <TablePagination {...pages} />
       </>
     );
   }

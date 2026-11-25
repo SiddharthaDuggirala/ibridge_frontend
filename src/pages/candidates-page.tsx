@@ -1,12 +1,10 @@
-import { Search, Upload } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
 
 import { CandidateRow } from "@/components/candidates/candidate-row";
 import { CandidateFormDialog } from "@/components/candidates/candidate-form-dialog";
-import { TalentPoolsSection } from "@/components/candidates/talent-pools-section";
 import { PageHeader } from "@/components/page-header";
 import { StatTile } from "@/components/stat-tile";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,7 +19,8 @@ import { useGetCandidatesQuery } from "@/store/candidates-api";
 import { toSkillList } from "@/utils/skills";
 import { RefreshButton } from "@/components/refresh-button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
+import { TablePagination } from "@/components/table-pagination";
+import { usePagination } from "@/hooks/use-pagination";
 
 
 // Which people the list shows. Those who left are hidden until asked for; nobody is ever deleted.
@@ -30,6 +29,7 @@ type ShowFilter = "current" | "left" | "everyone";
 export function CandidatesPage() {
   const [search, setSearch] = useState("");
   const [show, setShow] = useState<ShowFilter>("current");
+  
   const { data, error, isLoading, refetch, isFetching } = useGetCandidatesQuery();
 
   const candidates = data ?? [];
@@ -55,24 +55,22 @@ export function CandidatesPage() {
       .toLowerCase();
     return text.includes(term);
   });
+  const pages = usePagination(shown, `${term}|${show}`);
 
   return (
     <>
       <PageHeader
         title="Candidates"
         description="The reusable talent database behind every requirement."
-        actions={
-          <>
-            <Button variant="outline" disabled>
-              <Upload className="size-4" /> Bulk upload
-            </Button>
-            <CandidateFormDialog />
-          </>
-        }
+        actions={<CandidateFormDialog />}
       />
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <StatTile label="Candidates" value={isLoading ? "—" : candidates.length} />
+        <StatTile
+          label="Candidates"
+          value={isLoading ? "—" : candidates.length - leftCount}
+          hint={leftCount > 0 ? `${leftCount} more left` : undefined}
+        />
         <StatTile label="Available now" value={isLoading ? "—" : available} hint="Active, notice ≤ 30 days" tone="positive" />
         <StatTile label="Working" value={isLoading ? "—" : working} hint="Placed with a client" />
         <StatTile label="On bench" value={isLoading ? "—" : onBench} hint="Free for the next client" tone="warning" />
@@ -125,16 +123,15 @@ export function CandidatesPage() {
             ) : shown.length === 0 ? (
               <MessageRow text={candidates.length === 0 ? "No candidates yet." : term ? "No candidates match your search." : "No one to show here."} />
             ) : (
-              shown.map((candidate) => <CandidateRow key={candidate.id} candidate={candidate} />)
+              pages.pageRows.map((candidate) => <CandidateRow key={candidate.id} candidate={candidate} />)
             )}
           </TableBody>
         </Table>
       </Card>
+      <TablePagination {...pages} />
       <p className="text-xs text-muted-foreground">
         {shown.length} of {candidates.length} record(s)
       </p>
-
-      <TalentPoolsSection />
     </>
   );
 }
