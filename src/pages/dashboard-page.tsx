@@ -3,6 +3,10 @@ import { StatTile } from "@/components/stat-tile";
 import { useGetDashboardQuery } from "@/store/dashboard-api";
 import {AllEntities} from "@/components/dashboard/all-entities";
 import {RecentActivityCard, PlatformHealthCard} from "@/components/dashboard/activity-and-health";
+import { getRole } from "@/store/token";
+import { AttentionCard } from "@/components/attention-card";
+import { ROLES } from "@/constants/roles";
+
 
 export function DashboardPage() {
   const { data, error, isLoading } = useGetDashboardQuery();
@@ -18,9 +22,11 @@ export function DashboardPage() {
   return (
     <>
       <PageHeader
-        title="System administration"
+        title = {getRole() === ROLES.MD ? "Company overview" : "System administration"}
         description="Workforce overview across all clients."
       />
+      <AttentionCard roles={[ROLES.SYSADMIN, ROLES.MD]} />
+
       <div className="grid gap-3 sm:grid-cols-5 xl:grid-cols-5">
         <StatTile label="PEOPLE"
           value={data.people}

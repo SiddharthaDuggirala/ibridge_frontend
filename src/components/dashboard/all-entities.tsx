@@ -2,14 +2,15 @@ import {Database} from "lucide-react";
 import {Link} from "react-router";
 
 
-import { BUILT_PATHS, NAV_ITEMS } from "@/components/layout/navigation";
+import { navGroupsFor } from "@/components/layout/navigation";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
+import { getRole } from "@/store/token";
 
-
-const AREAS = NAV_ITEMS.filter((item) => item.path !== "/" && BUILT_PATHS.includes(item.path));
 
 export function AllEntities() {
+    // Only the pages this person may open (the same list as their menu), without the dashboard itself.
+    const AREAS = navGroupsFor(getRole()).flatMap((group) => group.items).filter((item) => item.path !== "/");
     return (
         <section className="space-y-3">
             <div className="flex items-center justify-between gap-3">

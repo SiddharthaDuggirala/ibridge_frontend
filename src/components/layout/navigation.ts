@@ -46,7 +46,7 @@ export interface NavGroup{
 export const NAV_GROUPS:NavGroup[] = [{
     label:"Workspace",
     items: [
-        {label:"Dashboard",path:'/', icon: LayoutDashboard},
+        {label:"Dashboard",path:'/', icon: LayoutDashboard,roles: [ROLES.MD]},
         {label:"Recruiter Workbench", path:'/workbench',icon:Gauge},
         {label:"Tickets",path:"/tickets", icon:LifeBuoy},
     ]

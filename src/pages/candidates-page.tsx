@@ -21,6 +21,9 @@ import { RefreshButton } from "@/components/refresh-button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TablePagination } from "@/components/table-pagination";
 import { usePagination } from "@/hooks/use-pagination";
+import { AttentionCard } from "@/components/attention-card";
+import { ROLES } from "@/constants/roles";
+
 
 
 // Which people the list shows. Those who left are hidden until asked for; nobody is ever deleted.
@@ -64,7 +67,7 @@ export function CandidatesPage() {
         description="The reusable talent database behind every requirement."
         actions={<CandidateFormDialog />}
       />
-
+      <AttentionCard roles={[ROLES.RECRUITER, ROLES.LEAD]} />
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <StatTile
           label="Candidates"

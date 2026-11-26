@@ -42,3 +42,4 @@ export const SETREPORTING = "api/accounts/setreporting/";
 export const GETONBOARDINGS = "api/recruitment/getonboardings/";
 export const MOVEONBOARDING = "api/recruitment/moveonboarding/";
 export const GETPIPELINE = "api/recruitment/getpipeline/";
+export const GETATTENTION = "api/recruitment/getattention/";

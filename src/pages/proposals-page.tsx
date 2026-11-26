@@ -2,6 +2,7 @@ import {Link} from "react-router";
 import {useState} from "react";
 import { ProposalProgress } from "@/components/candidates/proposal-progress";
 import {PageHeader} from "@/components/page-header";
+import { AttentionCard } from "@/components/attention-card";
 import {Card} from "@/components/ui/card";
 import { RefreshButton } from "@/components/refresh-button";
 
@@ -24,6 +25,7 @@ import { useBuHeadFilter } from "@/hooks/use-bu-head-filter";
 import { Button } from "@/components/ui/button";
 import { ROLES } from "@/constants/roles";
 import { getRole } from "@/store/token";
+
 
 
 export function ProposalPage() {
@@ -51,7 +53,7 @@ export function ProposalPage() {
     return (
         <>
         <PageHeader title="Proposals" description="Every candidate proposed to a client, and where each one is in the approvals."/>
-
+        <AttentionCard roles={[ROLES.BU_HEAD, ROLES.HR]} />
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             {/* Only worth showing when the list spans more than one BU Head (the MD and sa01). */}
