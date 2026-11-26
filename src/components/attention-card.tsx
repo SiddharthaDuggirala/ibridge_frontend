@@ -92,7 +92,10 @@ export function AttentionCard({ roles }: { roles: string[] }) {
             </p>
             <p className="text-xs text-muted-foreground">{facts.join(" · ")}</p>
           </div>
-          <Link to={`/${item.page}`} className="shrink-0 text-xs font-medium text-primary hover:underline">
+          <Link
+            to={`/${item.page}?focus=${item.proposal_id}`}
+            className="shrink-0 text-xs font-medium text-primary hover:underline"
+          >
             Open
           </Link>
         </li>

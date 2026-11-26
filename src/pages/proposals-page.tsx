@@ -1,4 +1,4 @@
-import {Link} from "react-router";
+import {Link, useSearchParams} from "react-router";
 import {useState} from "react";
 import { ProposalProgress } from "@/components/candidates/proposal-progress";
 import {PageHeader} from "@/components/page-header";
@@ -37,15 +37,23 @@ export function ProposalPage() {
     const {buHeadFilter,buHeads, setBuHeadFilter, shown} = useBuHeadFilter(proposals);
     // "Waiting for you": Django sends the moves this user may make on each proposal, so a non-empty list means it needs them.
     const [waitingOnly, setWaitingOnly] = useState(false);
+    // "Open" on the attention card links here with ?focus=<proposal id>; then only that proposal is shown.
+    const [searchParams, setSearchParams] = useSearchParams();
+    const focusId = Number(searchParams.get("focus")) || null;
     const waiting = shown.filter((proposal) => proposal.allowed_actions.length > 0);
-    const visible = waitingOnly ? waiting : shown;
-    const pages = usePagination(visible, `${buHeadFilter}|${waitingOnly}`);
+    let visible = waitingOnly ? waiting : shown;
+    if (focusId !== null) {
+      visible = shown.filter((proposal) => proposal.id === focusId);
+    }
+    const pages = usePagination(visible, `${buHeadFilter}|${waitingOnly}|${focusId}`);
     // Recruiters never move a proposal, so the toggle would always say 0 for them.
     const canAct = getRole() !== ROLES.RECRUITER;
 
     let emptyText = "No proposals for this BU Head.";
     if (proposals.length === 0) {
       emptyText = "No proposals yet.";
+    } else if (focusId !== null) {
+      emptyText = "This proposal is no longer in your list.";
     } else if (waitingOnly) {
       emptyText = "Nothing is waiting for you right now.";
     }
@@ -76,7 +84,10 @@ export function ProposalPage() {
               <Button
                 variant={waitingOnly ? "default" : "outline"}
                 aria-pressed={waitingOnly}
-                onClick={() => setWaitingOnly((on) => !on)}
+                onClick={() => {
+                  setSearchParams({});
+                  setWaitingOnly((on) => !on);
+                }}
               >
                 Waiting for you ({waiting.length})
               </Button>
@@ -84,6 +95,14 @@ export function ProposalPage() {
           </div>
             <RefreshButton onRefresh={refetch} isFetching={isFetching} />
         </div>
+        {focusId !== null ? (
+          <div className="flex items-center justify-between rounded-md border border-primary/30 bg-primary/5 px-4 py-2 text-sm">
+            <span>Showing the proposal you opened.</span>
+            <Button variant="ghost" size="sm" onClick={() => setSearchParams({})}>
+              Show all proposals
+            </Button>
+          </div>
+        ) : null}
         <Card>
             <Table className="min-w-[900px]">
                 <TableHeader>
