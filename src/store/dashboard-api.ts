@@ -6,6 +6,8 @@ export const dashboardApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getDashboard: build.query<DashboardSummary, void>({
       query: () => GETDASHBOARD,
+      // The numbers are built from all of these, so they refresh whenever one of them changes.
+      providesTags: ["Candidate", "Proposal", "Onboarding", "Client", "Team"],
     }),
   }),
 });

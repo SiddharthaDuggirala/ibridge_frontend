@@ -22,9 +22,6 @@ import type { PipelineCounts } from "@/types/pipeline";
 export function PipelinePage() {
 
     const {data, isLoading, error, isFetching, refetch} = useGetPipelineQuery();
-    console.log("---------------------------------");
-    console.log(data);
-    console.log("---------------------------------");
     const rows = data?.rows ?? [];
     const columns = data?.columns ?? [];
     const columnCount = columns.length + 3;

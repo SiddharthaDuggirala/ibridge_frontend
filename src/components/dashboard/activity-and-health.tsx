@@ -1,7 +1,18 @@
 import { Activity, AlertTriangle, History, ShieldCheck, Users, type LucideIcon } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { format } from "date-fns";
+import { Link } from "react-router";
 
-export function RecentActivityCard() {
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { RecentActivity } from "@/types/dashboard";
+import { parseDjangoDateTime } from "@/utils/dates";
+
+function readableTime(at: string): string {
+  const when = parseDjangoDateTime(at);
+  return when ? format(when, "d MMM, h:mm a") : at;
+}
+
+// The latest recorded steps, newest first.
+export function RecentActivityCard({ recent }: { recent: RecentActivity[] }) {
 
     return (
         <Card>
@@ -11,7 +22,26 @@ export function RecentActivityCard() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="py-6 text-center text-sm text-muted-foreground">No activity recorded yet.</p>
+        {recent.length === 0 ? (
+          <p className="py-6 text-center text-sm text-muted-foreground">No activity recorded yet.</p>
+        ) : (
+          <ul className="space-y-3">
+            {recent.map((item) => (
+              <li key={item.id} className="text-sm">
+                <p>
+                  <span className="font-medium">{item.label}</span>
+                  <span className="text-muted-foreground"> · </span>
+                  <Link to={`/candidates/${item.candidate.id}`} className="hover:underline">
+                    {item.candidate.name ?? "Unnamed"}
+                  </Link>
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {[item.client, item.by, readableTime(item.at)].filter(Boolean).join(" · ")}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
       </CardContent>
     </Card>
     )
