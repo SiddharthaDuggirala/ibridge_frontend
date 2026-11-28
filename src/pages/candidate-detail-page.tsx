@@ -16,6 +16,7 @@ import { ProposalProgress } from "@/components/candidates/proposal-progress";
 import { ProposalJourney } from "@/components/proposals/proposal-journey";
 import { LifeCycleCard } from "@/components/candidates/life-cycle-card";
 import { ProposalBlockCard } from "@/components/candidates/proposal-block-card";
+import { IdentityCard } from "@/components/candidates/identity-card";
 
 
 export function CandidateDetailPage() {
@@ -93,7 +94,7 @@ export function CandidateDetailPage() {
             </CardContent>
           </Card>
           <LifeCycleCard candidateId={candidate.id} />
-          <div className="grid gap-4 lg:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <Card>
               <CardHeader>
                 <CardTitle>Contact</CardTitle>
@@ -138,6 +139,7 @@ export function CandidateDetailPage() {
                 <Field label="Added on" value={candidate.created_on} />
               </CardContent>
             </Card>
+            <IdentityCard candidate={candidate} />
           </div>
     
           <Card>

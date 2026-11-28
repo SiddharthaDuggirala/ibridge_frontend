@@ -47,6 +47,8 @@ const EMPTY_FORM = {
   status: "active",
   recruiter_notes: "",
   last_contacted_on: "",
+  pan: "",
+  aadhaar: "",
 }
 
 
@@ -72,6 +74,8 @@ function toForm(candidate: Candidate): CandidateForm {
       status: candidate.status ?? "active",
       recruiter_notes: candidate.recruiter_notes ?? "",
       last_contacted_on: toIsoDate(candidate.last_contacted_on),
+      pan: "",
+      aadhaar:"",
     };
   }
 
@@ -99,8 +103,10 @@ export function CandidateFormDialog({candidate}:{candidate?:Candidate}) {
     event.preventDefault();
 
     // Turn the text fields into the shape Django expects.
-    const payload: CreateCandidateRequest = {
-        ...form,
+    const { pan, aadhaar, ...details } = form;
+
+    const payload: Omit<CreateCandidateRequest, "pan" | "aadhaar"> = {
+        ...details,
         experience_years: Number(form.experience_years),
         experience_months: Number(form.experience_months),
         current_ctc_amount: Number(form.current_ctc_amount),
@@ -117,7 +123,7 @@ export function CandidateFormDialog({candidate}:{candidate?:Candidate}) {
         if (candidate) {
           await editCandidate({ candidate_id: candidate.id, ...payload }).unwrap();
         } else {
-          await createCandidate(payload).unwrap();
+          await createCandidate({ ...payload, pan: pan.trim() || undefined, aadhaar: aadhaar.trim() || undefined }).unwrap();
           setForm(EMPTY_FORM); // clear only after a create
         }
         setOpen(false);
@@ -222,6 +228,32 @@ export function CandidateFormDialog({candidate}:{candidate?:Candidate}) {
                   </Select>
                 </Field>
               </div>
+              {candidate ? null : (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="PAN" id="pan" hint="Optional now. Needed before the offer.">
+                    <Input
+                      id="pan"
+                      placeholder="ABCDE1234F"
+                      maxLength={10}
+                      autoComplete="off"
+                      className="uppercase"
+                      value={form.pan}
+                      onChange={(e) => update("pan", e.target.value.toUpperCase())}
+                    />
+                  </Field>
+                  <Field label="Aadhaar" id="aadhaar" hint="Only the last 4 digits are kept.">
+                    <Input
+                      id="aadhaar"
+                      placeholder="1234 5678 9012"
+                      inputMode="numeric"
+                      maxLength={14}
+                      autoComplete="off"
+                      value={form.aadhaar}
+                      onChange={(e) => update("aadhaar", e.target.value)}
+                    />
+                  </Field>
+                </div>
+              )}
     
               <Field label="Recruiter notes" id="recruiter_notes">
                 <Textarea id="recruiter_notes" value={form.recruiter_notes} onChange={(e) => update("recruiter_notes", e.target.value)} />

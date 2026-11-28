@@ -19,6 +19,23 @@ export interface CreateCandidateRequest {
   availability: string;
   last_contacted_on: string | null;
   recruiter_notes: string;
+  pan?: string;
+  aadhaar?: string;
+}
+
+export interface CandidateIdentity {
+  pan: string | null; // "XXXXX1234F"
+  aadhaar: string | null; // "XXXX XXXX 1234"
+  pan_on_file: boolean;
+  aadhaar_on_file: boolean;
+  missing: IdentityField[]; // still needed before the offer
+  can_set: boolean; // this user may enter what is missing (the sysadmin may also correct)
+}
+
+export interface SetIdentityRequest {
+  candidate_id: number;
+  pan?: string;
+  aadhaar?: string;
 }
 
 export interface Candidate {
@@ -53,6 +70,7 @@ export interface Candidate {
   can_unblock: boolean;
   proposals: CandidateProposal[];
   current: CurrentStatus;
+  identity: CandidateIdentity;
 }
 
 export interface CandidateProposal {
@@ -63,4 +81,6 @@ export interface CandidateProposal {
 
 }
 
-export type EditCandidateRequest = CreateCandidateRequest & {candidate_id: number};
+export type IdentityField = "PAN" | "Aadhaar";
+
+export type EditCandidateRequest = Omit<CreateCandidateRequest, "pan" | "aadhaar"> & {candidate_id: number};

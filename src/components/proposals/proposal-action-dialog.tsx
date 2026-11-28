@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useMoveProposalMutation } from "@/store/proposals-api";
 import type { Proposal } from "@/types/proposal";
+import {Link} from "react-router";
 
 interface ActionConfig {
   label: string;
@@ -51,6 +52,17 @@ export function ProposalActionDialog({ proposal, action }: { proposal: Proposal;
 
   const config = ACTIONS[action];
   if (!config) return null; // an action Django knows but this screen does not (yet)
+  // No offer without PAN and Aadhaar (Django refuses it too): send HR to the candidate page to add them first.
+  const identityMissing = action === "hr_release_offer" ? proposal.candidate.identity_missing : [];
+  if (identityMissing.length > 0) {
+    return (
+      <Button variant="outline" size="sm" asChild>
+        <Link to={`/candidates/${proposal.candidate.id}`} title="Needed before the offer can be released">
+          Add {identityMissing.join(" and ")} first
+        </Link>
+      </Button>
+    );
+  }
   const needsBgv = config.fields === "bgv";
   const needsJoining = config.fields === "joining";
 

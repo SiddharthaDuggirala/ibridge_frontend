@@ -17,6 +17,7 @@ export const EDITCANDIDATE = "api/recruitment/editcandidate/"
 export const MOVEEXIT = "api/recruitment/moveexit/";
 export const UNBLOCKPROPOSALS = "api/recruitment/unblockproposals/";
 export const GETLIFECYCLE = "api/recruitment/getlifecycle/";
+export const SETCANDIDATEIDENTITY = "api/recruitment/setcandidateidentity/";
 
 
 // Clients

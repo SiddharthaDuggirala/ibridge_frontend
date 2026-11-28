@@ -1,5 +1,7 @@
-import { CREATECANDIDATE,GETCANDIDATES,DELETECANDIDATES,EDITCANDIDATE,UNBLOCKPROPOSALS } from "@/constants";
-import type { Candidate,CreateCandidateRequest,EditCandidateRequest } from "@/types/candidate";
+import { CREATECANDIDATE,GETCANDIDATES,DELETECANDIDATES,EDITCANDIDATE,UNBLOCKPROPOSALS,
+  SETCANDIDATEIDENTITY } from "@/constants";
+import type { Candidate,CreateCandidateRequest,EditCandidateRequest,
+  SetIdentityRequest } from "@/types/candidate";
 import { baseApi } from "./base-api";
 
 export const candidatesApi = baseApi.injectEndpoints({
@@ -30,6 +32,11 @@ export const candidatesApi = baseApi.injectEndpoints({
       query: (body) => ({ url: UNBLOCKPROPOSALS, method: "POST", body }),
       invalidatesTags: ["Candidate"], // the candidate, the lists and the life cycle refresh
     }),
+    // Enter PAN and/or Aadhaar. "Proposal" too: a proposal shows what is still missing before the offer.
+    setCandidateIdentity: build.mutation<Candidate, SetIdentityRequest>({
+      query: (body) => ({ url: SETCANDIDATEIDENTITY, method: "POST", body }),
+      invalidatesTags: ["Candidate", "Proposal"],
+    }),
   }),
 });
 
@@ -39,4 +46,5 @@ export const {
   useDeleteCandidateMutation, 
   useEditCandidateMutation, 
   useGetCandidateQuery,
-  useUnblockProposalsMutation } = candidatesApi;
+  useUnblockProposalsMutation,
+  useSetCandidateIdentityMutation } = candidatesApi;

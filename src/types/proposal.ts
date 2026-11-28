@@ -1,8 +1,10 @@
 import type { PersonRef } from "@/types/team";
+import type { IdentityField } from "@/types/candidate";
 
 export interface Proposal {
     id: number;
-    candidate: { id: number; name: string | null; primary_skill: string; location: string | null };
+    candidate: { id: number; name: string | null; primary_skill: string; location: string | null;
+      identity_missing: IdentityField[] };
     client: { id: number; name: string | null };
     stage: string;
     proposed_by: string;
@@ -71,4 +73,4 @@ export interface EditProposalRequest {
   proposal_id: number;
   bill_rate_hourly: number;
   bill_rate_currency: string;
-}
+}
