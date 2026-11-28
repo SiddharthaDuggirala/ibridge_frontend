@@ -28,13 +28,14 @@ export interface MoveOnboardingRequest {
 
 
 // How the employee left. Dates arrive as "dd/mm/YYYY".
-// stage: "clearance" (resigned: items and letter pending) -> "relieved"; other reasons go straight to "exited".
+// stage: "clearance" (resigned, non-performance: items and letter pending) -> "relieved"; other reasons go straight to "exited".
 export interface Exit {
   reason: ExitReason;
   reason_label: string;
+  after_exit: AfterExit; // always "leave" except non-performance, where the Lead chose
   last_working_day: string;
   stage: "clearance" | "relieved" | "exited";
-  items: ExitItem[]; // empty unless resigned
+  items: ExitItem[]; // empty unless resigned or non-performance
   relieved_on: string | null;
   recorded_by: string | null;
   comment: string | null;
@@ -49,10 +50,20 @@ export interface ExitItem {
 
 // One exit step. Each action carries its own fields, and TypeScript checks the right ones are there.
 export type MoveExitRequest =
-  | { onboarding_id: number; action: "record_exit"; reason: ExitReason; last_working_day: string; comment: string }
+  | {
+      onboarding_id: number;
+      action: "record_exit";
+      reason: ExitReason;
+      after_exit?: AfterExit; // needed for non_performance only
+      last_working_day: string;
+      comment: string;
+    }
   | { onboarding_id: number; action: "change_last_day"; last_working_day: string }
   | { onboarding_id: number; action: "clear_item"; item: string }
   | { onboarding_id: number; action: "release_relieving_letter" };
 
 
-export type ExitReason = "resigned" | "project_completed" | "client_terminated";
+export type ExitReason = "resigned" | "project_completed" | "client_terminated" | "non_performance";
+
+// After a non-performance exit: the person leaves the company, or stays and goes to the bench.
+export type AfterExit = "leave" | "bench";

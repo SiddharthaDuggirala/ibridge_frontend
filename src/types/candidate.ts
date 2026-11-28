@@ -48,6 +48,9 @@ export interface Candidate {
   can_edit:boolean;
   can_delete:boolean;
   can_propose: boolean;
+  // Why new proposals are blocked (a non-performance exit), or null. can_unblock: this user (sysadmin, MD) may lift it.
+  proposal_block: string | null;
+  can_unblock: boolean;
   proposals: CandidateProposal[];
   current: CurrentStatus;
 }

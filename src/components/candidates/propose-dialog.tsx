@@ -1,6 +1,7 @@
-import { Send } from "lucide-react";
+import { Ban, Send } from "lucide-react";
 import { useState, type SubmitEvent } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -71,6 +72,16 @@ export function ProposeDialog({ candidate }: { candidate: Candidate }) {
     }
 
     const name = candidate.name ?? "this candidate";
+
+    // A non-performance exit blocks new proposals: show why instead of the button (Django refuses them too).
+    // This comes after the hooks on purpose: React needs the same hooks called on every render.
+    if (candidate.proposal_block) {
+      return (
+        <Badge variant="outline" className="gap-1 whitespace-nowrap text-muted-foreground" title={candidate.proposal_block}>
+          <Ban className="size-3" /> Blocked
+        </Badge>
+      );
+    }
 
       return (
         <Dialog open={open} onOpenChange={handleOpenChange}>

@@ -18,12 +18,13 @@ interface ExitStep {
     return lastDay !== null && lastDay.getTime() <= Date.now();
   }
   
-  // The steps come from Django's data: a resignation has its clearance items and a letter, other reasons don't.
+  // The steps come from Django's data: resigned and non-performance have clearance items and a letter, other reasons don't.
   function exitSteps(exit: Exit): ExitStep[] {
     const arrived = lastDayArrived(exit);
     const recorded = { key: "recorded", label: "Exit recorded", done: true, caption: exit.reason_label };
     const lastDay = { key: "last_day", label: "Last working day", done: arrived, caption: exit.last_working_day };
-    if (exit.reason !== "resigned") return [recorded, lastDay];
+    // Django sends clearance items only for the reasons that need clearance (resigned, non-performance).
+    if (exit.items.length === 0) return [recorded, lastDay];
     return [
       recorded,
       ...exit.items.map((item) => ({

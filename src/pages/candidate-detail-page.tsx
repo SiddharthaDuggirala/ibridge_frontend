@@ -15,6 +15,7 @@ import { toSkillList } from "@/utils/skills";
 import { ProposalProgress } from "@/components/candidates/proposal-progress";
 import { ProposalJourney } from "@/components/proposals/proposal-journey";
 import { LifeCycleCard } from "@/components/candidates/life-cycle-card";
+import { ProposalBlockCard } from "@/components/candidates/proposal-block-card";
 
 
 export function CandidateDetailPage() {
@@ -73,6 +74,7 @@ export function CandidateDetailPage() {
               </>
             }
           />
+          <ProposalBlockCard candidate={candidate} />
           <Card>
             <CardHeader>
               <CardTitle>Approval progress</CardTitle>

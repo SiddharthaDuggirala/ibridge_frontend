@@ -1,4 +1,4 @@
-import { CREATECANDIDATE,GETCANDIDATES,DELETECANDIDATES,EDITCANDIDATE } from "@/constants";
+import { CREATECANDIDATE,GETCANDIDATES,DELETECANDIDATES,EDITCANDIDATE,UNBLOCKPROPOSALS } from "@/constants";
 import type { Candidate,CreateCandidateRequest,EditCandidateRequest } from "@/types/candidate";
 import { baseApi } from "./base-api";
 
@@ -25,6 +25,11 @@ export const candidatesApi = baseApi.injectEndpoints({
       query: ({ candidate_id }) => ({ url: DELETECANDIDATES, method: "POST", body: { candidate_id } }),
       invalidatesTags: ["Candidate"],
     }),
+    // The sysadmin or MD allows new proposals again after a non-performance exit (a comment is required).
+    unblockProposals: build.mutation<Candidate, { candidate_id: number; comment: string }>({
+      query: (body) => ({ url: UNBLOCKPROPOSALS, method: "POST", body }),
+      invalidatesTags: ["Candidate"], // the candidate, the lists and the life cycle refresh
+    }),
   }),
 });
 
@@ -33,4 +38,5 @@ export const {
   useCreateCandidateMutation, 
   useDeleteCandidateMutation, 
   useEditCandidateMutation, 
-  useGetCandidateQuery } = candidatesApi;
+  useGetCandidateQuery,
+  useUnblockProposalsMutation } = candidatesApi;
